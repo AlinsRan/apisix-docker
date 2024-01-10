@@ -36,6 +36,7 @@ ENV_OS_NAME                ?= $(shell uname -s | tr '[:upper:]' '[:lower:]')
 ENV_APISIX_TAR_NAME        ?= $(IMAGE_TAR_NAME)_$(APISIX_VERSION)
 ENV_APISIX_IMAGE_TAG_NAME  ?= $(IMAGE_NAME):$(APISIX_VERSION)
 ENV_DOCKER                 ?= docker
+ENV_PLATFORM               ?= linux/amd64,linux/arm64
 
 
 # Makefile basic extension function
@@ -90,7 +91,7 @@ push-multiarch-dev-on-debian:
 	@$(call func_echo_status, "$@ -> [ Start ]")
 	$(ENV_DOCKER) buildx build --network=host --push \
 		-t $(IMAGE_NAME):dev \
-		--platform linux/amd64,linux/arm64 \
+		--platform linux/amd64 \
 		-f ./debian-dev/Dockerfile debian-dev
 	@$(call func_echo_success_status, "$@ -> [ Done ]")
 
@@ -101,7 +102,7 @@ push-multiarch-on-debian:
 	@$(call func_echo_status, "$@ -> [ Start ]")
 	$(ENV_DOCKER) buildx build --network=host --push \
 		-t $(ENV_APISIX_IMAGE_TAG_NAME)-debian \
-		--platform linux/amd64,linux/arm64 \
+		--platform linux/amd64 \
 		-f ./debian/Dockerfile debian
 	@$(call func_echo_success_status, "$@ -> [ Done ]")
 

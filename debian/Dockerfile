@@ -19,28 +19,26 @@ FROM debian:bullseye-slim
 
 ARG APISIX_VERSION=3.7.0
 
+COPY apisix_0.0.0-0~ubuntu20.04_amd64.deb /apisix_0.0.0-0~ubuntu20.04_amd64.deb
+
 RUN set -ex; \
     arch=$(dpkg --print-architecture); \
     apt update; \
     apt-get -y install --no-install-recommends wget gnupg ca-certificates curl;\
     codename=`grep -Po 'VERSION="[0-9]+ \(\K[^)]+' /etc/os-release`; \
-    wget -O - https://openresty.org/package/pubkey.gpg | apt-key add -; \
     case "${arch}" in \
       amd64) \
-        echo "deb https://openresty.org/package/debian $codename openresty" | tee /etc/apt/sources.list.d/openresty.list \
-        && wget -O - https://repos.apiseven.com/pubkey.gpg | apt-key add - \
+        wget -O - https://repos.apiseven.com/pubkey.gpg | apt-key add - \
         && echo "deb https://repos.apiseven.com/packages/debian $codename main" | tee /etc/apt/sources.list.d/apisix.list \
         ;; \
       arm64) \
-        echo "deb https://openresty.org/package/arm64/debian $codename openresty" | tee /etc/apt/sources.list.d/openresty.list \
-        && wget -O - https://repos.apiseven.com/pubkey.gpg | apt-key add - \
+        wget -O - https://repos.apiseven.com/pubkey.gpg | apt-key add - \
         && echo "deb https://repos.apiseven.com/packages/arm64/debian $codename main" | tee /etc/apt/sources.list.d/apisix.list \
         ;; \
     esac; \
     apt update \
-    && apt install -y apisix=${APISIX_VERSION}-0 \
+    && apt install -y ./apisix_0.0.0-0~ubuntu20.04_amd64.deb \
     && apt-get purge -y --auto-remove \
-    && rm -f /etc/apt/sources.list.d/openresty.list /etc/apt/sources.list.d/apisix.list \
     && rm /usr/local/openresty/bin/etcdctl \
     && openresty -V \
     && apisix version
