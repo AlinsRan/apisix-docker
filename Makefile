@@ -39,6 +39,7 @@ ENV_OS_NAME                ?= $(shell uname -s | tr '[:upper:]' '[:lower:]')
 ENV_APISIX_TAR_NAME        ?= $(IMAGE_TAR_NAME)_$(APISIX_VERSION)
 ENV_APISIX_IMAGE_TAG_NAME  ?= $(IMAGE_NAME):$(APISIX_VERSION)
 ENV_DOCKER                 ?= docker
+ENV_PLATFORM               ?= linux/amd64,linux/arm64
 
 
 # Makefile basic extension function

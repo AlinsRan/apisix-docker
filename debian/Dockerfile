@@ -19,6 +19,8 @@ FROM debian:bullseye-slim
 
 ARG APISIX_VERSION=3.8.0
 
+COPY apisix_0.0.0-0~ubuntu20.04_amd64.deb /apisix_0.0.0-0~ubuntu20.04_amd64.deb
+
 RUN set -ex; \
     arch=$(dpkg --print-architecture); \
     apt update; \
@@ -35,7 +37,7 @@ RUN set -ex; \
         ;; \
     esac; \
     apt update \
-    && apt install -y apisix=${APISIX_VERSION}-0 \
+    && apt install -y ./apisix_0.0.0-0~ubuntu20.04_amd64.deb \
     && apt-get purge -y --auto-remove \
     && rm /usr/local/openresty/bin/etcdctl \
     && openresty -V \
